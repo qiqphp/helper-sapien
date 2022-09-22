@@ -1,0 +1,1 @@
+{{ response()->setJson($this->getData()) }}

@@ -1,0 +1,1 @@
+{{ response()->setFile($this->file) }}
