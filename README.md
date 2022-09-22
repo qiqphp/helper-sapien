@@ -173,7 +173,7 @@ all of the _Response_ methods available.
 To replace the proxied _Response_ object, use the `set()` method:
 
 ```qiq
-{{ request()->set(new \Sapien\Response() )}}
+{{ response()->set(new \Sapien\Response()) }}
 ```
 
 To get the proxied _Response_ object directly, use the `get()` method:
