@@ -5,6 +5,11 @@ This package provides [Qiq](https://qiqphp.com) helpers for
 allow you to read from a _Request_, and build a _Response_, from **inside a
 Qiq _Template_**.
 
+Read more about:
+
+- [the request helper](#request-helper)
+- [the response helper](#response-helper)
+
 ## Installation
 
 This package is installable via Composer as
