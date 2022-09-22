@@ -243,9 +243,7 @@ responses: one for _FileResponse_ and one for _JsonResponse_.
 To convert the _Response_ to a _FileResponse_, call `response()->setFile()`:
 
 ```qiq
-{{ response()->setFile(
-    name: 'path/to/file.php',
-) }}
+{{ response()->setFile('path/to/file.php') }}
 ```
 
 The `setFile()` method mimics the identically-named method in
