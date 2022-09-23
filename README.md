@@ -165,7 +165,7 @@ all of the _Response_ methods available.
 
 ```qiq
 {{ response()->setVersion(...) }}
-{{ response()->setStatus(...) }}
+{{ response()->setCode(...) }}
 {{ response()->setHeader(...) }}
 {{ response()->setCookie(...) }}
 ```
