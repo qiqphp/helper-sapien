@@ -137,11 +137,11 @@ use Sapien\Response as SapienResponse;
 
 /** @var Template $template */
 /** @var SapienResponse $sapienResponse */
-Request::register('response', $template, $sapienResponse);
+Response::register('response', $template, $sapienResponse);
 
 // or:
 $template->getHelperLocator()->set('response', function () use ($sapienResponse) {
-    return new Request($sapienResponse);
+    return new Response($sapienResponse);
 });
 ```
 
