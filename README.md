@@ -90,7 +90,7 @@ all of the _Request_ properties available.
 To replace the proxied _Request_ object, use the `set()` method:
 
 ```qiq
-{{ request()->set(new \Sapien\Request() )}}
+{{ request()->set(new \Sapien\Request()) }}
 ```
 
 To get the proxied _Request_ object directly, use the `get()` method:
