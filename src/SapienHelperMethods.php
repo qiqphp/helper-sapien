@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace Qiq\Helper\Sapien;
 
-trait SapienHelpers
+trait SapienHelperMethods
 {
 	public function request(): Request
 	{
-		return $this->getObject(Request::class);
+		return $this->get(Request::class);
 	}
 
 	public function response(): Response
 	{
-		return $this->getObject(Response::class);
+		return $this->get(Response::class);
 	}
 }
