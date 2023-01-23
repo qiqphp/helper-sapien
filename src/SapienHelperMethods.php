@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Qiq\Helper\Sapien;
 
+use Sapien\Request;
+use Sapien\Response;
+
 trait SapienHelperMethods
 {
 	public function request(): Request
