@@ -90,7 +90,7 @@ all of the _Request_ properties available.
 To replace the proxied _Request_ object, use the `set()` method:
 
 ```qiq
-{{ request()->set(new \Sapien\Request() )}}
+{{ request()->set(new \Sapien\Request()) }}
 ```
 
 To get the proxied _Request_ object directly, use the `get()` method:
@@ -137,11 +137,11 @@ use Sapien\Response as SapienResponse;
 
 /** @var Template $template */
 /** @var SapienResponse $sapienResponse */
-Request::register('response', $template, $sapienResponse);
+Response::register('response', $template, $sapienResponse);
 
 // or:
 $template->getHelperLocator()->set('response', function () use ($sapienResponse) {
-    return new Request($sapienResponse);
+    return new Response($sapienResponse);
 });
 ```
 
