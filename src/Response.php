@@ -8,6 +8,9 @@ use Sapien\Response\FileResponse;
 use Sapien\Response\JsonResponse;
 use SplFileObject;
 
+/**
+ * @mixin SapienResponse
+ */
 class Response
 {
     public static function register(

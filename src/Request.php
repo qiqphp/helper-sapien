@@ -7,6 +7,9 @@ use Sapien\Request as SapienRequest;
 use Sapien\Response\FileResponse;
 use Sapien\Response\JsonResponse;
 
+/**
+ * @mixin SapienRequest
+ */
 class Request
 {
     public static function register(
