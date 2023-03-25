@@ -10,8 +10,10 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     public function setUp() : void
     {
-        $this->template = Template::new([__DIR__ . '/templates/']);
-        Request::register('request', $this->template);
+        $this->template = Template::new(
+            paths: [__DIR__ . '/templates/'],
+            helpers: new SapienHelpers()
+        );
     }
 
     public function test()

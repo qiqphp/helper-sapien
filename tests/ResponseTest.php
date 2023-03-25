@@ -12,8 +12,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function setUp() : void
     {
-        $this->template = Template::new([__DIR__ . '/templates/']);
-        Response::register('response', $this->template);
+        $this->template = Template::new(
+            paths: [__DIR__ . '/templates/'],
+            helpers: new SapienHelpers()
+        );
     }
 
     public function test()
@@ -37,7 +39,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testSetJson()
     {
-        $data = (object) ['foo' => 'bar'];
+        $data = ['foo' => 'bar'];
         $this->template->setData($data);
         $this->template->setView('json');
         $response = $this->template->response()->render($this->template);
