@@ -13,62 +13,72 @@ Read more about:
 ## Installation
 
 This package is installable via Composer as
-[qiq/helpers-sapien](https://packagist.org/packages/qiq/helper-sapien):
+[qiq/helper-sapien](https://packagist.org/packages/qiq/helper-sapien):
 
 ```
-composer require qiq/helpers-sapien ^1.0
+composer require qiq/helper-sapien ^2.0
+```
+
+## Adding The Helpers
+
+To access the `request()` and `response()` helper methods in your template
+files, use the _SapienHelperMethods_ trait in your custom _Helpers_
+class ...
+
+```php
+namespace Project\Template;
+
+use Qiq\Helpers;
+use Qiq\Helper\Sapien\SapienHelperMethods;
+
+class CustomHelpers extends Helpers
+{
+    use SapienHelperMethods;
+}
+```
+
+... and instantiate a _Template_ object with your custom _Helpers_:
+
+```php
+use Project\Template\CustomHelpers;
+use Qiq\Template;
+
+$template = Template::new(
+    paths: ...,
+    helpers: new CustomHelpers()
+);
 ```
 
 ## Request Helper
 
-### Registration
+### Configuration
 
-To make the request helper available inside your _Template_, you need to
-register it with the Qiq _HelperLocator_. You can register the helper
-semi-automatically ...
-
-```php
-use Qiq\Helper\Sapien\Request;
-use Qiq\Template;
-
-/** @var Template $template */
-Request::register('request', $template);
-```
-
-... or you can do so more manually:
+By default, the request helper will construct a new internal Sapien _Request_
+object of its own. If you want to pass a different _Request_ object, you may
+do so via the Qiq _Container_ configuration:
 
 ```php
-use Qiq\Helper\Sapien\Request;
-use Qiq\Template;
-
-/** @var Template $template */
-$template->getHelperLocator()->set('request', function () {
-    return new Request();
-});
-```
-
-By default, the helper will construct a new internal Sapien _Request_ object of
-its own. If you want to pass an existing _Request_ object, you may do so:
-
-```php
-use Qiq\Helper\Sapien\Request;
+use Project\Template\CustomHelpers;
+use Qiq\Container;
+use Qiq\Helper\Sapien\Request as RequestHelper;
 use Qiq\Template;
 use Sapien\Request as SapienRequest;
 
-/** @var Template $template */
-/** @var SapienRequest $sapienRequest */
-Request::register('request', $template, $sapienRequest);
+$container = new Container([
+    RequestHelper::class => [
+        'request' = new SapienRequest(...),
+    ])
+]);
 
-// or:
-$template->getHelperLocator()->set('request', function () use ($sapienRequest) {
-    return new Request($sapienRequest);
-});
+$template = Template::new(
+    paths: ...,
+    helpers: new CustomHelpers($container)
+);
 ```
 
 ### Usage
 
-Once the helper is registered, you can call it using the method name you
-registered it under. You can use Qiq syntax ...
+Call the request helper as `request()` using Qiq syntax ...
 
 ```qiq
 {{ request()->... }}
@@ -76,7 +86,7 @@ registered it under. You can use Qiq syntax ...
 
 ... or PHP syntax:
 
-```html+php
+```php
 <?php $this->request()->... ?>
 ```
 
@@ -96,59 +106,41 @@ To replace the proxied _Request_ object, use the `set()` method:
 To get the proxied _Request_ object directly, use the `get()` method:
 
 ```html+php
-<?php $request = $this->request()->get(); ?>
+{{ $request = request()->get() }}
 ```
 
 ## Response Helper
 
-### Registration
+### Configuration
 
-To make the response helper available inside your _Template_, you need to
-register it with the Qiq _HelperLocator_. You can register the helper
-semi-automatically ...
-
-```php
-use Qiq\Helper\Sapien\Response;
-use Qiq\Template;
-
-/** @var Template $template */
-Response::register('response', $template);
-```
-
-... or you can do so more manually:
+By default, the response helper will construct a new internal
+Sapien _Response_ object of its own. If you want to pass a
+different _Response_ object, you may do so via the Qiq _Container_
+configuration:
 
 ```php
-use Qiq\Helper\Sapien\Response;
-use Qiq\Template;
-
-/** @var Template $template */
-$template->getHelperLocator()->set('response', function () {
-    return new Response();
-});
-```
-
-By default, the helper will construct a new internal Sapien _Response_ object of
-its own. If you want to pass an existing _Response_ object, you may do so:
-
-```php
-use Qiq\Helper\Sapien\Response;
+use Project\Template\CustomHelpers;
+use Qiq\Container;
+use Qiq\Helper\Sapien\Response as ResponseHelper;
 use Qiq\Template;
 use Sapien\Response as SapienResponse;
 
-/** @var Template $template */
-/** @var SapienResponse $sapienResponse */
-Response::register('response', $template, $sapienResponse);
+$container = new Container([
+    ResponseHelper::class => [
+        'response' = new SapienResponse(...),
+    ])
+]);
 
-// or:
-$template->getHelperLocator()->set('response', function () use ($sapienResponse) {
-    return new Response($sapienResponse);
-});
+$template = Template::new(
+    paths: ...,
+    helpers: new CustomHelpers($container)
+);
 ```
 
 ### Usage
 
-Once the helper is registered, you can call it using the method name you
-registered it under. You can use Qiq syntax ...
+Call the request helper as `response()` using Qiq syntax ...
+
 
 ```qiq
 {{ response()->... }}
@@ -156,7 +148,7 @@ registered it under. You can use Qiq syntax ...
 
 ... or PHP syntax:
 
-```html+php
+```php
 <?php $this->response()->... ?>
 ```
 
@@ -178,8 +170,8 @@ To replace the proxied _Response_ object, use the `set()` method:
 
 To get the proxied _Response_ object directly, use the `get()` method:
 
-```html+php
-<?php $response = $this->response()->get(); ?>
+```qiq
+{{ $response = response()->get() }}
 ```
 
 ### Rendering
@@ -188,7 +180,7 @@ With typical _Template_ usage, the code calling a _Template_ will set the
 rendered template results into a _Response_ body ...
 
 ```php
-/** @var \Qiq\Template $template */
+/** @var \Qiq\Engine&\Project\Template\CustomHelpers $template */
 $template->setData(...);
 $template->setView(...);
 $template->setLayout(...);
@@ -206,7 +198,7 @@ object.
 
 
 ```php
-/** @var \Qiq\Template $template */
+/** @var \Qiq\Engine&\Project\Template\CustomHelpers $template */
 $template->setData(...);
 $template->setView(...);
 $template->setLayout(...);
@@ -253,7 +245,7 @@ To convert the _Response_ to a _JsonResponse_, call `response()->setJson()`. The
 following example puts all the current _Template_ data into a _JsonResponse_:
 
 ```qiq
-{{ response()->setJson($this->getData()) }}
+{{ response()->setJson(getData()) }}
 ```
 
 The `setJson()` method mimics the identically-named method in
